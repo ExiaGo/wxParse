@@ -33,7 +33,7 @@ function wxParse(bindName = 'wxParseData', type='html', data='<div class="color:
   var transData = {};//存放转化后的数据
   if (type == 'html') {
     transData = HtmlToJson.html2json(data, bindName);
-    console.log(JSON.stringify(transData, ' ', ' '));
+    // console.log(JSON.stringify(transData, ' ', ' '));
   } else if (type == 'md' || type == 'markdown') {
     var converter = new showdown.Converter();
     var html = converter.makeHtml(data);
@@ -77,7 +77,7 @@ function wxParseImgLoad(e) {
 }
 // 假循环获取计算图片视觉最佳宽高
 function calMoreImageInfo(e, idx, that, bindName) {
-  var temData = that.data[bindName];
+  var temData = getData(bindName,that.data);
   if (!temData || temData.images.length == 0) {
     return;
   }
@@ -107,7 +107,7 @@ function wxAutoImageCal(originalWidth, originalHeight,that,bindName) {
   var windowWidth = 0, windowHeight = 0;
   var autoWidth = 0, autoHeight = 0;
   var results = {};
-  var padding = that.data[bindName].view.imagePadding;
+  var padding = getData(bindName,that.data).view.imagePadding;
   windowWidth = realWindowWidth-2*padding;
   windowHeight = realWindowHeight;
   //判断按照那种方式进行缩放
@@ -139,6 +139,32 @@ function wxParseTemArray(temArrayName,bindNameReg,total,that){
   obj = JSON.parse('{"'+ temArrayName +'":""}');
   obj[temArrayName] = array;
   that.setData(obj);
+}
+
+// 获取对象实例的属性值，支持多级用“.”隔开
+function getData(key, obj) {
+  debugger
+  if (!obj) 
+    console.error('obj is invalid:', obj);
+  var ka = key.split(/\./);
+  var key1 = ka.shift();
+
+  // 为了兼容旧的写法（xxxxx[x]）添加以下转换
+  var arrayNameReg = /^([a-zA-Z0-9_-]+)\[([0-9]+)\]$/;
+  if (arrayNameReg.test(key1)){
+    var nameValues = key1.match(arrayNameReg)
+    key1 = nameValues[1]
+    var index = nameValues[2]
+    ka.unshift(index)
+  }
+  // 兼容写法结束
+
+  if (ka.length < 1) {
+    return obj[key1];
+  } else {
+    obj = obj[key1];
+    return getData(ka.join("."), obj);
+  }
 }
 
 /**
