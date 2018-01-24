@@ -160,12 +160,12 @@ Page({
 	</div>`;
     var replyHtml1 = `<div style="margin-top:10px;height:50px;">
 		<p class="reply">
-			wxParse回复1:不错，喜欢[03][04]
+			wxParse回复1:不错，喜欢[03][04]<img src="../../image/icon_API.png"/>
 		</p>	
 	</div>`;
     var replyHtml2 = `<div style="margin-top:10px;height:50px;">
 		<p class="reply">
-			wxParse回复2:不错，喜欢[05][07]
+			wxParse回复2:不错，喜欢[05][07]<img src="../../image/icon_API_HL.png"/>
 		</p>	
 	</div>`;
     var replyHtml3 = `<div style="margin-top:10px;height:50px;">
@@ -193,10 +193,7 @@ Page({
 
 
     for (let i = 0; i < replyArr.length; i++) {
-      WxParse.wxParse('reply' + i, 'html', replyArr[i], that);
-      if (i === replyArr.length - 1) {
-        WxParse.wxParseTemArray("replyTemArray",'reply', replyArr.length, that)
-      }
+      WxParse.wxParse('replyTemArray.' + i, 'html', replyArr[i], that);
     }
   }
 
