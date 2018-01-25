@@ -143,7 +143,6 @@ function wxParseTemArray(temArrayName,bindNameReg,total,that){
 
 // 获取对象实例的属性值，支持多级用“.”隔开
 function getData(key, obj) {
-  debugger
   if (!obj) 
     console.error('obj is invalid:', obj);
   var ka = key.split(/\./);
